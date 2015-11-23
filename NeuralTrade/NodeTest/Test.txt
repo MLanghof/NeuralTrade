@@ -1,0 +1,44 @@
+var brain = require('brain');
+
+                var f = function (data, cb) {
+                    var net = new brain.NeuralNetwork({
+                            hiddenLayers: [2]
+                        });
+
+                    var output = net.train([
+                            {input: [0], output: [0]},
+                            {input: [0.25], output: [0.0625]},
+                            {input: [0.5], output: [0.25]},
+                            {input: [0.75], output: [0.5625]},
+                            {input: [1], output: [1]}
+                        ]);
+                    cb(null, output.error)
+                };
+
+
+
+            networkQuery = Edge.Func(@"
+                var brain = require('brain');
+
+                var net = new brain.NeuralNetwork({
+                        hiddenLayers: [3]
+                    });
+
+                return function (query, cb) {
+                    cb(null, query.data);
+                    if (query.mode == 'train')
+                    {
+                        var output = net.train(query.data);
+                        cb(null, output);
+                    }
+                    if (query.mode == 'run')
+                    {
+                        var output = net.run(query.data);
+                        cb(null, output);
+                    }
+                    if (query.query == 'query')
+                    {
+                        cb(null, query.data);
+                    }
+                };
+            ");
